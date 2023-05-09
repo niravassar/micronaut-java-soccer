@@ -1,4 +1,4 @@
-package example.micronaut;
+package com.example.soccer;
 
 public interface ApplicationConfiguration {
     int getMax();

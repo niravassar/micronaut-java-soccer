@@ -1,28 +1,17 @@
-package example.micronaut;
+package com.example.soccer;
 
 import io.micronaut.serde.annotation.Serdeable;
 
 import javax.validation.constraints.NotBlank;
 
-@Serdeable
-public class GenreUpdateCommand {
-
-    private long id;
+@Serdeable // <1>
+public class GenreSaveCommand {
 
     @NotBlank
     private String name;
 
-    public GenreUpdateCommand(long id, String name) {
-        this.id = id;
+    public GenreSaveCommand(String name) {
         this.name = name;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getName() {

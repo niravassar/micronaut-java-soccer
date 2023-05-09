@@ -1,4 +1,4 @@
-package example.micronaut.domain;
+package com.example.soccer.domain;
 
 import io.micronaut.serde.annotation.Serdeable;
 

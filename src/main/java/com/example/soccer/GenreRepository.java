@@ -1,6 +1,6 @@
-package example.micronaut;
+package com.example.soccer;
 
-import example.micronaut.domain.Genre;
+import com.example.soccer.domain.Genre;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;

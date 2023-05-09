@@ -1,4 +1,4 @@
-package example.micronaut;
+package com.example.soccer;
 
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.serde.annotation.Serdeable;

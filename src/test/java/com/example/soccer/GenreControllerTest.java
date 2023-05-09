@@ -1,6 +1,6 @@
-package example.micronaut;
+package com.example.soccer;
 
-import example.micronaut.domain.Genre;
+import com.example.soccer.domain.Genre;
 import io.micronaut.core.type.Argument;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;

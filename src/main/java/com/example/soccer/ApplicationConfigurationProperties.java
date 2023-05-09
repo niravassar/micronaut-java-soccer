@@ -1,4 +1,4 @@
-package example.micronaut;
+package com.example.soccer;
 
 import io.micronaut.context.annotation.ConfigurationProperties;
 

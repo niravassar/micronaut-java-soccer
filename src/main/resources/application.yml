@@ -1,6 +1,6 @@
 micronaut:
   application:
-    name: micronautguide
+    name: micronaut-java-soccer
 ---
 #tag::application[]
 application:
