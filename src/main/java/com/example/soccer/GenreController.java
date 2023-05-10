@@ -22,22 +22,22 @@ import static io.micronaut.http.HttpHeaders.LOCATION;
 @Controller("/genres")  // <2>
 class GenreController {
 
-    private final GenreRepository genreRepository;
+    private final SoccerGameRepository soccerGameRepository;
 
-    GenreController(GenreRepository genreRepository) { // <3>
-        this.genreRepository = genreRepository;
+    GenreController(SoccerGameRepository soccerGameRepository) { // <3>
+        this.soccerGameRepository = soccerGameRepository;
     }
 
     @Get("/{id}") // <4>
     SoccerGame show(Long id) {
-        return genreRepository
+        return soccerGameRepository
                 .findById(id)
                 .orElse(null); // <5>
     }
 
     @Put // <6>
     HttpResponse<?> update(@Body @Valid GenreUpdateCommand command) { // <7>
-        int numberOfEntitiesUpdated = genreRepository.update(command.getId(), command.getName());
+        int numberOfEntitiesUpdated = soccerGameRepository.update(command.getId(), command.getName());
 
         return HttpResponse
                 .noContent()
@@ -46,34 +46,16 @@ class GenreController {
 
     @Get(value = "/list{?args*}") // <9>
     List<SoccerGame> list(@Valid SortingAndOrderArguments args) {
-        return genreRepository.findAll(args);
+        return soccerGameRepository.findAll(args);
     }
 
     @Post // <10>
     HttpResponse<SoccerGame> save(@Body @Valid GenreSaveCommand cmd) {
-        SoccerGame soccerGame = genreRepository.save(cmd.getName());
+        SoccerGame soccerGame = soccerGameRepository.save(cmd.getName());
 
         return HttpResponse
                 .created(soccerGame)
                 .headers(headers -> headers.location(location(soccerGame.getId())));
-    }
-
-    @Post("/ex") // <11>
-    HttpResponse<SoccerGame> saveExceptions(@Body @Valid GenreSaveCommand cmd) {
-        try {
-            SoccerGame soccerGame = genreRepository.saveWithException(cmd.getName());
-            return HttpResponse
-                    .created(soccerGame)
-                    .headers(headers -> headers.location(location(soccerGame.getId())));
-        } catch(PersistenceException e) {
-            return HttpResponse.noContent();
-        }
-    }
-
-    @Delete("/{id}") // <12>
-    HttpResponse<?> delete(Long id) {
-        genreRepository.deleteById(id);
-        return HttpResponse.noContent();
     }
 
     private URI location(Long id) {

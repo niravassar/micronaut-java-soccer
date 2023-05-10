@@ -15,15 +15,15 @@ import java.util.List;
 import java.util.Optional;
 
 @Singleton // <1>
-public class GenreRepositoryImpl implements GenreRepository {
+public class SoccerGameRepositoryImpl implements SoccerGameRepository {
 
     private static final List<String> VALID_PROPERTY_NAMES = Arrays.asList("id", "name");
 
     private final EntityManager entityManager;  // <2>
     private final ApplicationConfiguration applicationConfiguration;
 
-    public GenreRepositoryImpl(EntityManager entityManager, // <2>
-                               ApplicationConfiguration applicationConfiguration) {
+    public SoccerGameRepositoryImpl(EntityManager entityManager, // <2>
+                                    ApplicationConfiguration applicationConfiguration) {
         this.entityManager = entityManager;
         this.applicationConfiguration = applicationConfiguration;
     }
@@ -40,12 +40,6 @@ public class GenreRepositoryImpl implements GenreRepository {
         SoccerGame soccerGame = new SoccerGame(name);
         entityManager.persist(soccerGame);
         return soccerGame;
-    }
-
-    @Override
-    @Transactional // <4>
-    public void deleteById(long id) {
-        findById(id).ifPresent(entityManager::remove);
     }
 
     @ReadOnly // <3>
@@ -68,12 +62,5 @@ public class GenreRepositoryImpl implements GenreRepository {
                 .setParameter("name", name)
                 .setParameter("id", id)
                 .executeUpdate();
-    }
-
-    @Override
-    @Transactional // <4>
-    public SoccerGame saveWithException(@NotBlank String name) {
-        save(name);
-        throw new PersistenceException();
     }
 }

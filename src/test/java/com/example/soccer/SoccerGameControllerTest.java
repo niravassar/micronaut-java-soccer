@@ -97,11 +97,6 @@ class SoccerGameControllerTest {
 
         assertEquals(2, soccerGames.size());
 
-        request = HttpRequest.POST("/genres/ex", new GenreSaveCommand("Microservices")); // <3>
-        response = blockingClient.exchange(request);
-
-        assertEquals(NO_CONTENT, response.getStatus());
-
         request = HttpRequest.GET("/genres/list");
         soccerGames = blockingClient.retrieve(request, Argument.of(List.class, SoccerGame.class));
 
@@ -123,13 +118,6 @@ class SoccerGameControllerTest {
         soccerGames = blockingClient.retrieve(request, Argument.of(List.class, SoccerGame.class));
 
         assertEquals(0, soccerGames.size());
-
-        // cleanup:
-        for (Long genreId : genreIds) {
-            request = HttpRequest.DELETE("/genres/" + genreId);
-            response = blockingClient.exchange(request);
-            assertEquals(NO_CONTENT, response.getStatus());
-        }
     }
 
     private Long entityId(HttpResponse response) {
