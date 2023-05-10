@@ -5,7 +5,6 @@ import io.micronaut.transaction.annotation.ReadOnly;
 import jakarta.inject.Singleton;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotBlank;
@@ -53,14 +52,5 @@ public class SoccerGameRepositoryImpl implements SoccerGameRepository {
         args.getOffset().ifPresent(query::setFirstResult);
 
         return query.getResultList();
-    }
-
-    @Override
-    @Transactional // <4>
-    public int update(long id, @NotBlank String name) {
-        return entityManager.createQuery("UPDATE SoccerGame g SET name = :name where id = :id")
-                .setParameter("name", name)
-                .setParameter("id", id)
-                .executeUpdate();
     }
 }

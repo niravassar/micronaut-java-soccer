@@ -14,6 +14,4 @@ public interface SoccerGameRepository {
     SoccerGame save(@NotBlank String name);
 
     List<SoccerGame> findAll(@NotNull SortingAndOrderArguments args);
-
-    int update(long id, @NotBlank String name);
 }

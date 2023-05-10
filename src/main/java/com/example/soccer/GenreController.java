@@ -35,15 +35,6 @@ class GenreController {
                 .orElse(null); // <5>
     }
 
-    @Put // <6>
-    HttpResponse<?> update(@Body @Valid GenreUpdateCommand command) { // <7>
-        int numberOfEntitiesUpdated = soccerGameRepository.update(command.getId(), command.getName());
-
-        return HttpResponse
-                .noContent()
-                .header(LOCATION, location(command.getId()).getPath()); // <8>
-    }
-
     @Get(value = "/list{?args*}") // <9>
     List<SoccerGame> list(@Valid SortingAndOrderArguments args) {
         return soccerGameRepository.findAll(args);
