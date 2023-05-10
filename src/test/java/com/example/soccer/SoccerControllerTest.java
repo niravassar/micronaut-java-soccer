@@ -1,6 +1,6 @@
 package com.example.soccer;
 
-import com.example.soccer.domain.Genre;
+import com.example.soccer.domain.Soccer;
 import io.micronaut.core.type.Argument;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @MicronautTest // <1>
-class GenreControllerTest {
+class SoccerControllerTest {
 
     private BlockingHttpClient blockingClient;
 
@@ -79,9 +79,9 @@ class GenreControllerTest {
         genreIds.add(id);
         request = HttpRequest.GET("/genres/" + id);
 
-        Genre genre = blockingClient.retrieve(request, Genre.class); // <4>
+        Soccer soccer = blockingClient.retrieve(request, Soccer.class); // <4>
 
-        assertEquals("Microservices", genre.getName());
+        assertEquals("Microservices", soccer.getName());
 
         request = HttpRequest.PUT("/genres", new GenreUpdateCommand(id, "Micro-services"));
         response = blockingClient.exchange(request);  // <5>
@@ -89,13 +89,13 @@ class GenreControllerTest {
         assertEquals(NO_CONTENT, response.getStatus());
 
         request = HttpRequest.GET("/genres/" + id);
-        genre = blockingClient.retrieve(request, Genre.class);
-        assertEquals("Micro-services", genre.getName());
+        soccer = blockingClient.retrieve(request, Soccer.class);
+        assertEquals("Micro-services", soccer.getName());
 
         request = HttpRequest.GET("/genres/list");
-        List<Genre> genres = blockingClient.retrieve(request, Argument.of(List.class, Genre.class));
+        List<Soccer> soccers = blockingClient.retrieve(request, Argument.of(List.class, Soccer.class));
 
-        assertEquals(2, genres.size());
+        assertEquals(2, soccers.size());
 
         request = HttpRequest.POST("/genres/ex", new GenreSaveCommand("Microservices")); // <3>
         response = blockingClient.exchange(request);
@@ -103,26 +103,26 @@ class GenreControllerTest {
         assertEquals(NO_CONTENT, response.getStatus());
 
         request = HttpRequest.GET("/genres/list");
-        genres = blockingClient.retrieve(request, Argument.of(List.class, Genre.class));
+        soccers = blockingClient.retrieve(request, Argument.of(List.class, Soccer.class));
 
-        assertEquals(2, genres.size());
+        assertEquals(2, soccers.size());
 
         request = HttpRequest.GET("/genres/list?max=1");
-        genres = blockingClient.retrieve(request, Argument.of(List.class, Genre.class));
+        soccers = blockingClient.retrieve(request, Argument.of(List.class, Soccer.class));
 
-        assertEquals(1, genres.size());
-        assertEquals("DevOps", genres.get(0).getName());
+        assertEquals(1, soccers.size());
+        assertEquals("DevOps", soccers.get(0).getName());
 
         request = HttpRequest.GET("/genres/list?max=1&order=desc&sort=name");
-        genres = blockingClient.retrieve(request, Argument.of(List.class, Genre.class));
+        soccers = blockingClient.retrieve(request, Argument.of(List.class, Soccer.class));
 
-        assertEquals(1, genres.size());
-        assertEquals("Micro-services", genres.get(0).getName());
+        assertEquals(1, soccers.size());
+        assertEquals("Micro-services", soccers.get(0).getName());
 
         request = HttpRequest.GET("/genres/list?max=1&offset=10");
-        genres = blockingClient.retrieve(request, Argument.of(List.class, Genre.class));
+        soccers = blockingClient.retrieve(request, Argument.of(List.class, Soccer.class));
 
-        assertEquals(0, genres.size());
+        assertEquals(0, soccers.size());
 
         // cleanup:
         for (Long genreId : genreIds) {

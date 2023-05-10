@@ -1,6 +1,6 @@
 package com.example.soccer;
 
-import com.example.soccer.domain.Genre;
+import com.example.soccer.domain.Soccer;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -9,15 +9,15 @@ import java.util.Optional;
 
 public interface GenreRepository {
 
-    Optional<Genre> findById(long id);
+    Optional<Soccer> findById(long id);
 
-    Genre save(@NotBlank String name);
+    Soccer save(@NotBlank String name);
 
-    Genre saveWithException(@NotBlank String name);
+    Soccer saveWithException(@NotBlank String name);
 
     void deleteById(long id);
 
-    List<Genre> findAll(@NotNull SortingAndOrderArguments args);
+    List<Soccer> findAll(@NotNull SortingAndOrderArguments args);
 
     int update(long id, @NotBlank String name);
 }

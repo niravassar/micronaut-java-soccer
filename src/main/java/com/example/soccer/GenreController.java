@@ -1,6 +1,6 @@
 package com.example.soccer;
 
-import com.example.soccer.domain.Genre;
+import com.example.soccer.domain.Soccer;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
@@ -29,7 +29,7 @@ class GenreController {
     }
 
     @Get("/{id}") // <4>
-    Genre show(Long id) {
+    Soccer show(Long id) {
         return genreRepository
                 .findById(id)
                 .orElse(null); // <5>
@@ -45,26 +45,26 @@ class GenreController {
     }
 
     @Get(value = "/list{?args*}") // <9>
-    List<Genre> list(@Valid SortingAndOrderArguments args) {
+    List<Soccer> list(@Valid SortingAndOrderArguments args) {
         return genreRepository.findAll(args);
     }
 
     @Post // <10>
-    HttpResponse<Genre> save(@Body @Valid GenreSaveCommand cmd) {
-        Genre genre = genreRepository.save(cmd.getName());
+    HttpResponse<Soccer> save(@Body @Valid GenreSaveCommand cmd) {
+        Soccer soccer = genreRepository.save(cmd.getName());
 
         return HttpResponse
-                .created(genre)
-                .headers(headers -> headers.location(location(genre.getId())));
+                .created(soccer)
+                .headers(headers -> headers.location(location(soccer.getId())));
     }
 
     @Post("/ex") // <11>
-    HttpResponse<Genre> saveExceptions(@Body @Valid GenreSaveCommand cmd) {
+    HttpResponse<Soccer> saveExceptions(@Body @Valid GenreSaveCommand cmd) {
         try {
-            Genre genre = genreRepository.saveWithException(cmd.getName());
+            Soccer soccer = genreRepository.saveWithException(cmd.getName());
             return HttpResponse
-                    .created(genre)
-                    .headers(headers -> headers.location(location(genre.getId())));
+                    .created(soccer)
+                    .headers(headers -> headers.location(location(soccer.getId())));
         } catch(PersistenceException e) {
             return HttpResponse.noContent();
         }

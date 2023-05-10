@@ -30,16 +30,16 @@ public class Book {
     private String isbn;
 
     @ManyToOne
-    private Genre genre;
+    private Soccer soccer;
 
     public Book() {}
 
     public Book(@NotNull String isbn,
                 @NotNull String name,
-                Genre genre) {
+                Soccer soccer) {
         this.isbn = isbn;
         this.name = name;
-        this.genre = genre;
+        this.soccer = soccer;
     }
 
     public Long getId() {
@@ -66,12 +66,12 @@ public class Book {
         this.isbn = isbn;
     }
 
-    public Genre getGenre() {
-        return genre;
+    public Soccer getSoccer() {
+        return soccer;
     }
 
-    public void setGenre(Genre genre) {
-        this.genre = genre;
+    public void setSoccer(Soccer soccer) {
+        this.soccer = soccer;
     }
 
     @Override
@@ -80,7 +80,7 @@ public class Book {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", isbn='" + isbn + '\'' +
-                ", genre=" + genre +
+                ", genre=" + soccer +
                 '}';
     }
 }
