@@ -18,8 +18,7 @@ import static javax.persistence.GenerationType.AUTO;
 
 @Serdeable
 @Entity
-@Table(name = "soccer")
-public class Soccer {
+public class SoccerGame {
 
     @Id
     @GeneratedValue(strategy = AUTO)
@@ -30,12 +29,12 @@ public class Soccer {
     private String name;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "soccer")
+    @OneToMany(mappedBy = "soccerGame")
     private Set<Book> books = new HashSet<>();
 
-    public Soccer() {}
+    public SoccerGame() {}
 
-    public Soccer(@NotNull String name) {
+    public SoccerGame(@NotNull String name) {
         this.name = name;
     }
 

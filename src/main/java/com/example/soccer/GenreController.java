@@ -1,6 +1,6 @@
 package com.example.soccer;
 
-import com.example.soccer.domain.Soccer;
+import com.example.soccer.domain.SoccerGame;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
@@ -29,7 +29,7 @@ class GenreController {
     }
 
     @Get("/{id}") // <4>
-    Soccer show(Long id) {
+    SoccerGame show(Long id) {
         return genreRepository
                 .findById(id)
                 .orElse(null); // <5>
@@ -45,26 +45,26 @@ class GenreController {
     }
 
     @Get(value = "/list{?args*}") // <9>
-    List<Soccer> list(@Valid SortingAndOrderArguments args) {
+    List<SoccerGame> list(@Valid SortingAndOrderArguments args) {
         return genreRepository.findAll(args);
     }
 
     @Post // <10>
-    HttpResponse<Soccer> save(@Body @Valid GenreSaveCommand cmd) {
-        Soccer soccer = genreRepository.save(cmd.getName());
+    HttpResponse<SoccerGame> save(@Body @Valid GenreSaveCommand cmd) {
+        SoccerGame soccerGame = genreRepository.save(cmd.getName());
 
         return HttpResponse
-                .created(soccer)
-                .headers(headers -> headers.location(location(soccer.getId())));
+                .created(soccerGame)
+                .headers(headers -> headers.location(location(soccerGame.getId())));
     }
 
     @Post("/ex") // <11>
-    HttpResponse<Soccer> saveExceptions(@Body @Valid GenreSaveCommand cmd) {
+    HttpResponse<SoccerGame> saveExceptions(@Body @Valid GenreSaveCommand cmd) {
         try {
-            Soccer soccer = genreRepository.saveWithException(cmd.getName());
+            SoccerGame soccerGame = genreRepository.saveWithException(cmd.getName());
             return HttpResponse
-                    .created(soccer)
-                    .headers(headers -> headers.location(location(soccer.getId())));
+                    .created(soccerGame)
+                    .headers(headers -> headers.location(location(soccerGame.getId())));
         } catch(PersistenceException e) {
             return HttpResponse.noContent();
         }

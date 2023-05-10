@@ -1,6 +1,6 @@
 package com.example.soccer;
 
-import com.example.soccer.domain.Soccer;
+import com.example.soccer.domain.SoccerGame;
 import io.micronaut.transaction.annotation.ReadOnly;
 import jakarta.inject.Singleton;
 
@@ -30,16 +30,16 @@ public class GenreRepositoryImpl implements GenreRepository {
 
     @Override
     @ReadOnly // <3>
-    public Optional<Soccer> findById(long id) {
-        return Optional.ofNullable(entityManager.find(Soccer.class, id));
+    public Optional<SoccerGame> findById(long id) {
+        return Optional.ofNullable(entityManager.find(SoccerGame.class, id));
     }
 
     @Override
     @Transactional // <4>
-    public Soccer save(@NotBlank String name) {
-        Soccer soccer = new Soccer(name);
-        entityManager.persist(soccer);
-        return soccer;
+    public SoccerGame save(@NotBlank String name) {
+        SoccerGame soccerGame = new SoccerGame(name);
+        entityManager.persist(soccerGame);
+        return soccerGame;
     }
 
     @Override
@@ -49,12 +49,12 @@ public class GenreRepositoryImpl implements GenreRepository {
     }
 
     @ReadOnly // <3>
-    public List<Soccer> findAll(@NotNull SortingAndOrderArguments args) {
-        String qlString = "SELECT g FROM Soccer as g";
+    public List<SoccerGame> findAll(@NotNull SortingAndOrderArguments args) {
+        String qlString = "SELECT g FROM SoccerGame as g";
         if (args.getOrder().isPresent() && args.getSort().isPresent() && VALID_PROPERTY_NAMES.contains(args.getSort().get())) {
             qlString += " ORDER BY g." + args.getSort().get() + ' ' + args.getOrder().get().toLowerCase();
         }
-        TypedQuery<Soccer> query = entityManager.createQuery(qlString, Soccer.class);
+        TypedQuery<SoccerGame> query = entityManager.createQuery(qlString, SoccerGame.class);
         query.setMaxResults(args.getMax().orElseGet(applicationConfiguration::getMax));
         args.getOffset().ifPresent(query::setFirstResult);
 
@@ -64,7 +64,7 @@ public class GenreRepositoryImpl implements GenreRepository {
     @Override
     @Transactional // <4>
     public int update(long id, @NotBlank String name) {
-        return entityManager.createQuery("UPDATE Soccer g SET name = :name where id = :id")
+        return entityManager.createQuery("UPDATE SoccerGame g SET name = :name where id = :id")
                 .setParameter("name", name)
                 .setParameter("id", id)
                 .executeUpdate();
@@ -72,7 +72,7 @@ public class GenreRepositoryImpl implements GenreRepository {
 
     @Override
     @Transactional // <4>
-    public Soccer saveWithException(@NotBlank String name) {
+    public SoccerGame saveWithException(@NotBlank String name) {
         save(name);
         throw new PersistenceException();
     }

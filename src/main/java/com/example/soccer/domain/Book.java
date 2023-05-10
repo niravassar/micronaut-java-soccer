@@ -14,7 +14,6 @@ import static javax.persistence.GenerationType.AUTO;
 
 @Serdeable
 @Entity
-@Table(name = "book")
 public class Book {
 
     @Id
@@ -30,16 +29,16 @@ public class Book {
     private String isbn;
 
     @ManyToOne
-    private Soccer soccer;
+    private SoccerGame soccerGame;
 
     public Book() {}
 
     public Book(@NotNull String isbn,
                 @NotNull String name,
-                Soccer soccer) {
+                SoccerGame soccerGame) {
         this.isbn = isbn;
         this.name = name;
-        this.soccer = soccer;
+        this.soccerGame = soccerGame;
     }
 
     public Long getId() {
@@ -66,12 +65,12 @@ public class Book {
         this.isbn = isbn;
     }
 
-    public Soccer getSoccer() {
-        return soccer;
+    public SoccerGame getSoccerGame() {
+        return soccerGame;
     }
 
-    public void setSoccer(Soccer soccer) {
-        this.soccer = soccer;
+    public void setSoccerGame(SoccerGame soccerGame) {
+        this.soccerGame = soccerGame;
     }
 
     @Override
@@ -80,7 +79,7 @@ public class Book {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", isbn='" + isbn + '\'' +
-                ", genre=" + soccer +
+                ", soccerGame=" + soccerGame +
                 '}';
     }
 }
