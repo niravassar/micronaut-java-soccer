@@ -20,7 +20,6 @@ import static io.micronaut.http.HttpHeaders.LOCATION;
 import static io.micronaut.http.HttpStatus.BAD_REQUEST;
 import static io.micronaut.http.HttpStatus.CREATED;
 import static io.micronaut.http.HttpStatus.NOT_FOUND;
-import static io.micronaut.http.HttpStatus.NO_CONTENT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -64,13 +63,13 @@ class SoccerGameControllerTest {
 
         List<Long> genreIds = new ArrayList<>();
 
-        HttpRequest<?> request = HttpRequest.POST("/genres", new GenreSaveCommand("DevOps")); // <3>
+        HttpRequest<?> request = HttpRequest.POST("/genres", new SoccerGameSaveCommand("DevOps")); // <3>
         HttpResponse<?> response = blockingClient.exchange(request);
         genreIds.add(entityId(response));
 
         assertEquals(CREATED, response.getStatus());
 
-        request = HttpRequest.POST("/genres", new GenreSaveCommand("Microservices")); // <3>
+        request = HttpRequest.POST("/genres", new SoccerGameSaveCommand("Microservices")); // <3>
         response = blockingClient.exchange(request);
 
         assertEquals(CREATED, response.getStatus());

@@ -4,44 +4,36 @@ import com.example.soccer.domain.SoccerGame;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
-import io.micronaut.http.annotation.Delete;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
-import io.micronaut.http.annotation.Put;
-import io.micronaut.scheduling.TaskExecutors;
-import io.micronaut.scheduling.annotation.ExecuteOn;
 
-import javax.persistence.PersistenceException;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
-import static io.micronaut.http.HttpHeaders.LOCATION;
-
-@ExecuteOn(TaskExecutors.IO)  // <1>
-@Controller("/genres")  // <2>
-class GenreController {
+@Controller("/genres")
+class SoccerGameController {
 
     private final SoccerGameRepository soccerGameRepository;
 
-    GenreController(SoccerGameRepository soccerGameRepository) { // <3>
+    SoccerGameController(SoccerGameRepository soccerGameRepository) { // <3>
         this.soccerGameRepository = soccerGameRepository;
     }
 
-    @Get("/{id}") // <4>
+    @Get("/{id}")
     SoccerGame show(Long id) {
         return soccerGameRepository
                 .findById(id)
-                .orElse(null); // <5>
+                .orElse(null);
     }
 
-    @Get(value = "/list{?args*}") // <9>
+    @Get(value = "/list{?args*}")
     List<SoccerGame> list(@Valid SortingAndOrderArguments args) {
         return soccerGameRepository.findAll(args);
     }
 
-    @Post // <10>
-    HttpResponse<SoccerGame> save(@Body @Valid GenreSaveCommand cmd) {
+    @Post
+    HttpResponse<SoccerGame> save(@Body @Valid SoccerGameSaveCommand cmd) {
         SoccerGame soccerGame = soccerGameRepository.save(cmd.getName());
 
         return HttpResponse

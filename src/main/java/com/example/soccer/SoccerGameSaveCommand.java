@@ -4,13 +4,13 @@ import io.micronaut.serde.annotation.Serdeable;
 
 import javax.validation.constraints.NotBlank;
 
-@Serdeable // <1>
-public class GenreSaveCommand {
+@Serdeable
+public class SoccerGameSaveCommand {
 
     @NotBlank
     private String name;
 
-    public GenreSaveCommand(String name) {
+    public SoccerGameSaveCommand(String name) {
         this.name = name;
     }
 
