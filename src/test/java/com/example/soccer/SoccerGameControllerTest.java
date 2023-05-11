@@ -24,14 +24,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@MicronautTest // <1>
+@MicronautTest
 class SoccerGameControllerTest {
 
     private BlockingHttpClient blockingClient;
 
     @Inject
     @Client("/")
-    HttpClient client; // <2>
+    HttpClient client;
 
     @BeforeEach
     void setup() {
@@ -41,7 +41,7 @@ class SoccerGameControllerTest {
     @Test
     void testFindNonExistingGenreReturns404() {
         HttpClientResponseException thrown = assertThrows(HttpClientResponseException.class, () ->
-            blockingClient.exchange(HttpRequest.GET("/genres/99"))
+            blockingClient.exchange(HttpRequest.GET("/soccer/99"))
         );
 
         assertNotNull(thrown.getResponse());
@@ -53,26 +53,26 @@ class SoccerGameControllerTest {
 
         List<Long> genreIds = new ArrayList<>();
 
-        HttpRequest<?> request = HttpRequest.POST("/genres", new SoccerGameSaveCommand("DevOps")); // <3>
+        HttpRequest<?> request = HttpRequest.POST("/soccer", new SoccerGameSaveCommand("DevOps"));
         HttpResponse<?> response = blockingClient.exchange(request);
         genreIds.add(entityId(response));
 
         assertEquals(CREATED, response.getStatus());
 
-        request = HttpRequest.POST("/genres", new SoccerGameSaveCommand("Microservices")); // <3>
+        request = HttpRequest.POST("/soccer", new SoccerGameSaveCommand("Microservices"));
         response = blockingClient.exchange(request);
 
         assertEquals(CREATED, response.getStatus());
 
         Long id = entityId(response);
         genreIds.add(id);
-        request = HttpRequest.GET("/genres/" + id);
+        request = HttpRequest.GET("/soccer/" + id);
 
-        SoccerGame soccerGame = blockingClient.retrieve(request, SoccerGame.class); // <4>
+        SoccerGame soccerGame = blockingClient.retrieve(request, SoccerGame.class);
 
         assertEquals("Microservices", soccerGame.getName());
 
-        request = HttpRequest.GET("/genres/list");
+        request = HttpRequest.GET("/soccer/list");
         List<SoccerGame> soccerGames = blockingClient.retrieve(request, Argument.of(List.class, SoccerGame.class));
 
         assertEquals(2, soccerGames.size());
@@ -81,7 +81,7 @@ class SoccerGameControllerTest {
     }
 
     private Long entityId(HttpResponse response) {
-        String path = "/genres/";
+        String path = "/soccer/";
         String value = response.header(LOCATION);
         if (value == null) {
             return null;

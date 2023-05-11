@@ -11,7 +11,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
-@Controller("/genres")
+@Controller("/soccer")
 class SoccerGameController {
 
     private final SoccerGameRepository soccerGameRepository;
@@ -42,6 +42,6 @@ class SoccerGameController {
     }
 
     private URI location(Long id) {
-        return URI.create("/genres/" + id);
+        return URI.create("/soccer/" + id);
     }
 }
