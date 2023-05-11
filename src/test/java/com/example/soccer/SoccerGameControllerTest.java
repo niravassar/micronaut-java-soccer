@@ -39,16 +39,6 @@ class SoccerGameControllerTest {
     }
 
     @Test
-    void supplyAnInvalidOrderTriggersValidationFailure() {
-        HttpClientResponseException thrown = assertThrows(HttpClientResponseException.class, () ->
-                blockingClient.exchange(HttpRequest.GET("/genres/list?order=foo"))
-        );
-
-        assertNotNull(thrown.getResponse());
-        assertEquals(BAD_REQUEST, thrown.getStatus());
-    }
-
-    @Test
     void testFindNonExistingGenreReturns404() {
         HttpClientResponseException thrown = assertThrows(HttpClientResponseException.class, () ->
             blockingClient.exchange(HttpRequest.GET("/genres/99"))
@@ -86,28 +76,8 @@ class SoccerGameControllerTest {
         List<SoccerGame> soccerGames = blockingClient.retrieve(request, Argument.of(List.class, SoccerGame.class));
 
         assertEquals(2, soccerGames.size());
-
-        request = HttpRequest.GET("/genres/list");
-        soccerGames = blockingClient.retrieve(request, Argument.of(List.class, SoccerGame.class));
-
-        assertEquals(2, soccerGames.size());
-
-        request = HttpRequest.GET("/genres/list?max=1");
-        soccerGames = blockingClient.retrieve(request, Argument.of(List.class, SoccerGame.class));
-
-        assertEquals(1, soccerGames.size());
         assertEquals("DevOps", soccerGames.get(0).getName());
-
-        request = HttpRequest.GET("/genres/list?max=1&order=desc&sort=name");
-        soccerGames = blockingClient.retrieve(request, Argument.of(List.class, SoccerGame.class));
-
-        assertEquals(1, soccerGames.size());
-        assertEquals("Microservices", soccerGames.get(0).getName());
-
-        request = HttpRequest.GET("/genres/list?max=1&offset=10");
-        soccerGames = blockingClient.retrieve(request, Argument.of(List.class, SoccerGame.class));
-
-        assertEquals(0, soccerGames.size());
+        assertEquals("Microservices", soccerGames.get(1).getName());
     }
 
     private Long entityId(HttpResponse response) {

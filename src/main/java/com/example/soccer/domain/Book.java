@@ -72,14 +72,4 @@ public class Book {
     public void setSoccerGame(SoccerGame soccerGame) {
         this.soccerGame = soccerGame;
     }
-
-    @Override
-    public String toString() {
-        return "Book{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", isbn='" + isbn + '\'' +
-                ", soccerGame=" + soccerGame +
-                '}';
-    }
 }

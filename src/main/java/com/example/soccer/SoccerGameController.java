@@ -27,9 +27,9 @@ class SoccerGameController {
                 .orElse(null);
     }
 
-    @Get(value = "/list{?args*}")
-    List<SoccerGame> list(@Valid SortingAndOrderArguments args) {
-        return soccerGameRepository.findAll(args);
+    @Get(value = "/list")
+    List<SoccerGame> list() {
+        return soccerGameRepository.findAll();
     }
 
     @Post
