@@ -24,18 +24,18 @@ public class Player {
     private String name;
 
     @NotNull
-    @Column(name = "isbn", nullable = false)
-    private String isbn;
+    @Column(name = "age", nullable = false)
+    private int age;
 
     @ManyToOne
     private SoccerGame soccerGame;
 
     public Player() {}
 
-    public Player(@NotNull String isbn,
+    public Player(@NotNull int age,
                   @NotNull String name,
                   SoccerGame soccerGame) {
-        this.isbn = isbn;
+        this.age = age;
         this.name = name;
         this.soccerGame = soccerGame;
     }
@@ -56,12 +56,12 @@ public class Player {
         this.name = name;
     }
 
-    public String getIsbn() {
-        return isbn;
+    public int getAge() {
+        return age;
     }
 
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
+    public void setAge(String isbn) {
+        this.age = age;
     }
 
     public SoccerGame getSoccerGame() {

@@ -29,7 +29,27 @@ public class SoccerGame {
 
     @JsonIgnore
     @OneToMany(mappedBy = "soccerGame")
-    private Set<Player> players = new HashSet<>();
+    private Set<Player> playersTeamA = new HashSet<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "soccerGame")
+    private Set<Player> playersTeamB = new HashSet<>();
+
+    @NotNull
+    @Column(name = "minPlayers", nullable = false)
+    private int minPlayers;
+
+    @NotNull
+    @Column(name = "maxPlayers", nullable = false)
+    private int maxPlayer;
+
+    @NotNull
+    @Column(name = "teamANumSubs", nullable = false)
+    private int teamANumSubs;
+
+    @NotNull
+    @Column(name = "teamBNumSubs", nullable = false)
+    private int teamBNumSubs;
 
     public SoccerGame() {}
 
@@ -53,11 +73,35 @@ public class SoccerGame {
         this.name = name;
     }
 
-    public Set<Player> getPlayers() {
-        return players;
+    public Set<Player> getPlayersTeamA() {
+        return playersTeamA;
     }
 
-    public void setPlayers(Set<Player> players) {
-        this.players = players;
+    public void setPlayersTeamA(Set<Player> playersTeamA) {
+        this.playersTeamA = playersTeamA;
     }
+
+    public Set<Player> getPlayersTeamB() {
+        return playersTeamB;
+    }
+
+    public void setPlayersTeamB(Set<Player> playersTeamB) {
+        this.playersTeamB = playersTeamB;
+    }
+
+    public int getMinPlayers() { return minPlayers; }
+
+    public void setMinPlayers(int minPlayers) { this.minPlayers = minPlayers;}
+
+    public int getMaxPlayer() { return maxPlayer; }
+
+    public void setMaxPlayer(int maxPlayer) { this.maxPlayer = maxPlayer;}
+
+    public int getTeamANumSubs() { return teamANumSubs; }
+
+    public void setTeamANumSubs(int teamANumSubs) { this.teamANumSubs = teamANumSubs; }
+
+    public int getTeamBNumSubs() { return teamBNumSubs; }
+
+    public void setTeamBNumSubs(int teamBNumSubs) { this.teamBNumSubs = teamBNumSubs;}
 }
