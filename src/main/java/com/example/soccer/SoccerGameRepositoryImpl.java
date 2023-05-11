@@ -31,8 +31,8 @@ public class SoccerGameRepositoryImpl implements SoccerGameRepository {
 
     @Override
     @Transactional
-    public SoccerGame save(@NotBlank String name) {
-        SoccerGame soccerGame = new SoccerGame(name);
+    public SoccerGame save(@NotBlank String name, int minPlayers, int maxPlayers) {
+        SoccerGame soccerGame = new SoccerGame(name, minPlayers, maxPlayers);
         entityManager.persist(soccerGame);
         return soccerGame;
     }

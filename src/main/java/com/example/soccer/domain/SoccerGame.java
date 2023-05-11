@@ -36,7 +36,7 @@ public class SoccerGame {
 
     @NotNull
     @Column(name = "maxPlayers", nullable = false)
-    private int maxPlayer;
+    private int maxPlayers;
 
     @NotNull
     @Column(name = "teamANumSubs", nullable = false)
@@ -48,8 +48,10 @@ public class SoccerGame {
 
     public SoccerGame() {}
 
-    public SoccerGame(@NotNull String name) {
+    public SoccerGame(@NotNull String name, int minPlayers, int maxPlayers) {
         this.name = name;
+        this.minPlayers = minPlayers;
+        this.maxPlayers = maxPlayers;
     }
 
     public Long getId() {
@@ -88,9 +90,9 @@ public class SoccerGame {
 
     public void setMinPlayers(int minPlayers) { this.minPlayers = minPlayers;}
 
-    public int getMaxPlayer() { return maxPlayer; }
+    public int getMaxPlayers() { return maxPlayers; }
 
-    public void setMaxPlayer(int maxPlayer) { this.maxPlayer = maxPlayer;}
+    public void setMaxPlayers(int maxPlayers) { this.maxPlayers = maxPlayers;}
 
     public int getTeamANumSubs() { return teamANumSubs; }
 

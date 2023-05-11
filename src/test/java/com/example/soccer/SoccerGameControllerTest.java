@@ -56,13 +56,13 @@ class SoccerGameControllerTest {
 
         List<Long> genreIds = new ArrayList<>();
 
-        HttpRequest<?> request = HttpRequest.POST("/soccer", new SoccerGameSaveCommand("Saturday Pickup"));
+        HttpRequest<?> request = HttpRequest.POST("/soccer", new SoccerGameSaveCommand("Saturday Pickup", 6,8));
         HttpResponse<?> response = blockingClient.exchange(request);
         genreIds.add(entityId(response));
 
         assertEquals(CREATED, response.getStatus());
 
-        request = HttpRequest.POST("/soccer", new SoccerGameSaveCommand("Sunday Pickup"));
+        request = HttpRequest.POST("/soccer", new SoccerGameSaveCommand("Sunday Pickup",3,5));
         response = blockingClient.exchange(request);
 
         assertEquals(CREATED, response.getStatus());
@@ -74,6 +74,8 @@ class SoccerGameControllerTest {
         SoccerGame soccerGame = blockingClient.retrieve(request, SoccerGame.class);
 
         assertEquals("Sunday Pickup", soccerGame.getName());
+        assertEquals(3, soccerGame.getMinPlayers());
+        assertEquals(5, soccerGame.getMaxPlayers());
 
         request = HttpRequest.GET("/soccer/list");
         List<SoccerGame> soccerGames = blockingClient.retrieve(request, Argument.of(List.class, SoccerGame.class));

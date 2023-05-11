@@ -34,7 +34,7 @@ class SoccerGameController {
 
     @Post
     HttpResponse<SoccerGame> save(@Body @Valid SoccerGameSaveCommand cmd) {
-        SoccerGame soccerGame = soccerGameRepository.save(cmd.getName());
+        SoccerGame soccerGame = soccerGameRepository.save(cmd.getName(), cmd.getMinPlayers(), cmd.getMaxPlayers());
 
         return HttpResponse
                 .created(soccerGame)

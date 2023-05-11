@@ -10,7 +10,7 @@ public interface SoccerGameRepository {
 
     Optional<SoccerGame> findById(long id);
 
-    SoccerGame save(@NotBlank String name);
+    SoccerGame save(@NotBlank String name, int minPlayers, int maxPlayers);
 
     List<SoccerGame> findAll();
 }
