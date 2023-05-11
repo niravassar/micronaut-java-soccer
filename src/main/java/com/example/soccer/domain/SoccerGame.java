@@ -9,7 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
@@ -30,7 +29,7 @@ public class SoccerGame {
 
     @JsonIgnore
     @OneToMany(mappedBy = "soccerGame")
-    private Set<Book> books = new HashSet<>();
+    private Set<Player> players = new HashSet<>();
 
     public SoccerGame() {}
 
@@ -54,11 +53,11 @@ public class SoccerGame {
         this.name = name;
     }
 
-    public Set<Book> getBooks() {
-        return books;
+    public Set<Player> getPlayers() {
+        return players;
     }
 
-    public void setBooks(Set<Book> books) {
-        this.books = books;
+    public void setPlayers(Set<Player> players) {
+        this.players = players;
     }
 }

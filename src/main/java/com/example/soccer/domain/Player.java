@@ -7,14 +7,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import static javax.persistence.GenerationType.AUTO;
 
 @Serdeable
 @Entity
-public class Book {
+public class Player {
 
     @Id
     @GeneratedValue(strategy = AUTO)
@@ -31,11 +30,11 @@ public class Book {
     @ManyToOne
     private SoccerGame soccerGame;
 
-    public Book() {}
+    public Player() {}
 
-    public Book(@NotNull String isbn,
-                @NotNull String name,
-                SoccerGame soccerGame) {
+    public Player(@NotNull String isbn,
+                  @NotNull String name,
+                  SoccerGame soccerGame) {
         this.isbn = isbn;
         this.name = name;
         this.soccerGame = soccerGame;
