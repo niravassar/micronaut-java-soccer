@@ -33,6 +33,9 @@ class SoccerGameControllerTest {
     @Client("/")
     HttpClient client;
 
+    @Inject
+    SoccerGameRepository soccerGameRepository;
+
     @BeforeEach
     void setup() {
         blockingClient = client.toBlocking();
@@ -53,13 +56,13 @@ class SoccerGameControllerTest {
 
         List<Long> genreIds = new ArrayList<>();
 
-        HttpRequest<?> request = HttpRequest.POST("/soccer", new SoccerGameSaveCommand("DevOps"));
+        HttpRequest<?> request = HttpRequest.POST("/soccer", new SoccerGameSaveCommand("Saturday Pickup"));
         HttpResponse<?> response = blockingClient.exchange(request);
         genreIds.add(entityId(response));
 
         assertEquals(CREATED, response.getStatus());
 
-        request = HttpRequest.POST("/soccer", new SoccerGameSaveCommand("Microservices"));
+        request = HttpRequest.POST("/soccer", new SoccerGameSaveCommand("Sunday Pickup"));
         response = blockingClient.exchange(request);
 
         assertEquals(CREATED, response.getStatus());
@@ -70,14 +73,14 @@ class SoccerGameControllerTest {
 
         SoccerGame soccerGame = blockingClient.retrieve(request, SoccerGame.class);
 
-        assertEquals("Microservices", soccerGame.getName());
+        assertEquals("Sunday Pickup", soccerGame.getName());
 
         request = HttpRequest.GET("/soccer/list");
         List<SoccerGame> soccerGames = blockingClient.retrieve(request, Argument.of(List.class, SoccerGame.class));
 
         assertEquals(2, soccerGames.size());
-        assertEquals("DevOps", soccerGames.get(0).getName());
-        assertEquals("Microservices", soccerGames.get(1).getName());
+        assertEquals("Saturday Pickup", soccerGames.get(0).getName());
+        assertEquals("Sunday Pickup", soccerGames.get(1).getName());
     }
 
     private Long entityId(HttpResponse response) {
