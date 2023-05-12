@@ -1,5 +1,6 @@
 package com.example.soccer;
 
+import com.example.soccer.domain.Player;
 import com.example.soccer.domain.SoccerGame;
 import io.micronaut.core.type.Argument;
 import io.micronaut.http.HttpRequest;
@@ -51,11 +52,8 @@ class SoccerGameControllerTest {
     @Test
     void testGenreCrudOperations() {
 
-        List<Long> genreIds = new ArrayList<>();
-
         HttpRequest<?> request = HttpRequest.POST("/soccer", new SoccerGameSaveCommand("Saturday Pickup", 6,8));
         HttpResponse<?> response = blockingClient.exchange(request);
-        genreIds.add(entityId(response));
 
         assertEquals(CREATED, response.getStatus());
 
@@ -65,7 +63,6 @@ class SoccerGameControllerTest {
         assertEquals(CREATED, response.getStatus());
 
         Long id = entityId(response);
-        genreIds.add(id);
         request = HttpRequest.GET("/soccer/" + id);
 
         SoccerGame soccerGame = blockingClient.retrieve(request, SoccerGame.class);
@@ -84,6 +81,15 @@ class SoccerGameControllerTest {
 
     @Test
     void testPlayerCrud() {
+
+        HttpRequest<?> request = HttpRequest.POST("/soccer/savePlayer", new PlayerSaveCommand("Shreyas Assar", 16));
+        HttpResponse<?> response = blockingClient.exchange(request);
+
+        assertEquals(CREATED, response.getStatus());
+
+        List<Player> players = soccerGameRepository.findAllPlayers();
+        assertEquals("Shreyas Assar", players.get(0).getName());
+        assertEquals(16, players.get(0).getAge());
 
     }
 
