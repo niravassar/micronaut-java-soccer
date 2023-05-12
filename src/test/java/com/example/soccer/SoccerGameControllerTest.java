@@ -82,6 +82,11 @@ class SoccerGameControllerTest {
         assertEquals("Sunday Pickup", soccerGames.get(1).getName());
     }
 
+    @Test
+    void testPlayerCrud() {
+
+    }
+
     private Long entityId(HttpResponse response) {
         String path = "/soccer/";
         String value = response.header(LOCATION);
