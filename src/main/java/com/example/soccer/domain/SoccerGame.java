@@ -23,11 +23,11 @@ public class SoccerGame {
     private String name;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "soccerGame")
+    @OneToMany
     private Set<Player> playersTeamA = new HashSet<>();
 
     @JsonIgnore
-    @OneToMany(mappedBy = "soccerGame")
+    @OneToMany
     private Set<Player> playersTeamB = new HashSet<>();
 
     @NotNull

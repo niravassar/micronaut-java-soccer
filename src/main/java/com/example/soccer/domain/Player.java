@@ -27,17 +27,12 @@ public class Player {
     @Column(name = "age", nullable = false)
     private int age;
 
-    @ManyToOne
-    private SoccerGame soccerGame;
-
     public Player() {}
 
-    public Player(@NotNull int age,
-                  @NotNull String name,
-                  SoccerGame soccerGame) {
-        this.age = age;
+    public Player(@NotNull String name,
+                  @NotNull int age) {
         this.name = name;
-        this.soccerGame = soccerGame;
+        this.age = age;
     }
 
     public Long getId() {
@@ -62,13 +57,5 @@ public class Player {
 
     public void setAge(String isbn) {
         this.age = age;
-    }
-
-    public SoccerGame getSoccerGame() {
-        return soccerGame;
-    }
-
-    public void setSoccerGame(SoccerGame soccerGame) {
-        this.soccerGame = soccerGame;
     }
 }

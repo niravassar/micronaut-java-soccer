@@ -1,5 +1,6 @@
 package com.example.soccer;
 
+import com.example.soccer.domain.Player;
 import com.example.soccer.domain.SoccerGame;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;
@@ -39,6 +40,15 @@ class SoccerGameController {
         return HttpResponse
                 .created(soccerGame)
                 .headers(headers -> headers.location(location(soccerGame.getId())));
+    }
+
+    @Post(value = "/savePlayer")
+    HttpResponse<Player> savePlayer(@Body @Valid PlayerSaveCommand cmd) {
+        Player player = null; //= soccerGameRepository.savePlayer(cmd.getName(), cmd.getAge());
+
+        return HttpResponse
+                .created(player)
+                .headers(headers -> headers.location(location(player.getId())));
     }
 
     private URI location(Long id) {
