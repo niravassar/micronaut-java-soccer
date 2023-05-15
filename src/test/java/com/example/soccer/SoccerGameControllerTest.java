@@ -79,16 +79,21 @@ class SoccerGameControllerTest {
     }
 
     @Test
-    void testPlayerCrud() {
+    void testSavePlayerToGame() {
 
-        HttpRequest<?> request = HttpRequest.POST("/soccer/savePlayer", new PlayerSaveCommand("Shreyas Assar", 16));
+        // save game
+        HttpRequest<?> request = HttpRequest.POST("/soccer", new SoccerGameSaveCommand("Saturday Pickup", 6,8));
         HttpResponse<?> response = blockingClient.exchange(request);
+        Long soccerGameId = entityId(response);
 
-        assertEquals(CREATED, response.getStatus());
+        // save player to game
+        HttpRequest<?> playerRequest = HttpRequest.POST("/soccer/savePlayerToGame", new PlayerSaveCommand(soccerGameId, "Shreyas Assar", 16));
+        HttpResponse<?> playerResponse = blockingClient.exchange(playerRequest);
 
-        List<Player> players = soccerGameRepository.findAllPlayers();
-        assertEquals("Shreyas Assar", players.get(0).getName());
-        assertEquals(16, players.get(0).getAge());
+        List<SoccerGame> soccerGames = soccerGameRepository.findAllSoccerGames();
+        assertEquals("Saturday Pickup", soccerGames.get(0).getName());
+        assertEquals("Shreyas Assar", soccerGames.get(0).getPlayerPool().stream().findFirst().get().getName());;
+        assertEquals(16, soccerGames.get(0).getPlayerPool().stream().findFirst().get().getAge());;
     }
 
     private Long entityId(HttpResponse response) {

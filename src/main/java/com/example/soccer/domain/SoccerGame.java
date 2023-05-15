@@ -23,28 +23,16 @@ public class SoccerGame {
     private String name;
 
     @JsonIgnore
-    @OneToMany
-    private Set<Player> playersTeamA = new HashSet<>();
-
-    @JsonIgnore
-    @OneToMany
-    private Set<Player> playersTeamB = new HashSet<>();
+    @OneToMany(cascade = CascadeType.ALL)
+    private Set<Player> playerPool = new HashSet<>();
 
     @NotNull
-    @Column(name = "minPlayers", nullable = false)
+    @Column(name = "minPlayers")
     private int minPlayers;
 
     @NotNull
-    @Column(name = "maxPlayers", nullable = false)
+    @Column(name = "maxPlayers")
     private int maxPlayers;
-
-    @NotNull
-    @Column(name = "teamANumSubs", nullable = false)
-    private int teamANumSubs;
-
-    @NotNull
-    @Column(name = "teamBNumSubs", nullable = false)
-    private int teamBNumSubs;
 
     public SoccerGame() {}
 
@@ -70,22 +58,6 @@ public class SoccerGame {
         this.name = name;
     }
 
-    public Set<Player> getPlayersTeamA() {
-        return playersTeamA;
-    }
-
-    public void setPlayersTeamA(Set<Player> playersTeamA) {
-        this.playersTeamA = playersTeamA;
-    }
-
-    public Set<Player> getPlayersTeamB() {
-        return playersTeamB;
-    }
-
-    public void setPlayersTeamB(Set<Player> playersTeamB) {
-        this.playersTeamB = playersTeamB;
-    }
-
     public int getMinPlayers() { return minPlayers; }
 
     public void setMinPlayers(int minPlayers) { this.minPlayers = minPlayers;}
@@ -94,11 +66,11 @@ public class SoccerGame {
 
     public void setMaxPlayers(int maxPlayers) { this.maxPlayers = maxPlayers;}
 
-    public int getTeamANumSubs() { return teamANumSubs; }
+    public Set<Player> getPlayerPool() {return playerPool;}
 
-    public void setTeamANumSubs(int teamANumSubs) { this.teamANumSubs = teamANumSubs; }
+    public void setPlayerPool(Set<Player> playerPool) {this.playerPool = playerPool;}
 
-    public int getTeamBNumSubs() { return teamBNumSubs; }
-
-    public void setTeamBNumSubs(int teamBNumSubs) { this.teamBNumSubs = teamBNumSubs;}
+    public void addPlayerToPlayerPool(Player player) {
+        this.playerPool.add(player);
+    }
 }

@@ -23,13 +23,13 @@ public class SoccerGameRepositoryImpl implements SoccerGameRepository {
 
     @Override
     @ReadOnly
-    public Optional<SoccerGame> findById(long id) {
+    public Optional<SoccerGame> findSoccerGameById(long id) {
         return Optional.ofNullable(entityManager.find(SoccerGame.class, id));
     }
 
     @Override
     @Transactional
-    public SoccerGame save(@NotBlank String name, int minPlayers, int maxPlayers) {
+    public SoccerGame saveSoccerGame(@NotBlank String name, int minPlayers, int maxPlayers) {
         SoccerGame soccerGame = new SoccerGame(name, minPlayers, maxPlayers);
         entityManager.persist(soccerGame);
         return soccerGame;
@@ -37,14 +37,17 @@ public class SoccerGameRepositoryImpl implements SoccerGameRepository {
 
     @Override
     @Transactional
-    public Player savePlayer(@NotBlank String name, int age) {
-        Player player = new Player(name, age);
-        entityManager.persist(player);
+    public Player savePlayerToGame(PlayerSaveCommand playerSaveCommand) {
+        Optional<SoccerGame> soccerGame = this.findSoccerGameById(playerSaveCommand.getSoccerGameId());
+        Player player = new Player(playerSaveCommand.getName(), playerSaveCommand.getAge());
+        soccerGame.ifPresent(sg -> sg.addPlayerToPlayerPool(player));
+       // entityManager.persist(player);
+        entityManager.persist(soccerGame.get());
         return player;
     }
 
     @ReadOnly
-    public List<SoccerGame> findAll() {
+    public List<SoccerGame> findAllSoccerGames() {
         String qlString = "SELECT g FROM SoccerGame as g";
         TypedQuery<SoccerGame> query = entityManager.createQuery(qlString, SoccerGame.class);
         return query.getResultList();

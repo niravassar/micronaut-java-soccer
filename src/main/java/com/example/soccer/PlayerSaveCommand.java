@@ -7,12 +7,15 @@ import javax.validation.constraints.NotBlank;
 @Serdeable
 public class PlayerSaveCommand {
 
+    private Long soccerGameId;
+
     @NotBlank
     private String name;
 
     private int age;
 
-    public PlayerSaveCommand(String name, int age) {
+    public PlayerSaveCommand(Long soccerGameId, String name, int age) {
+        this.soccerGameId = soccerGameId;
         this.name = name;
         this.age = age;
     }
@@ -33,4 +36,7 @@ public class PlayerSaveCommand {
         this.age = age;
     }
 
+    public Long getSoccerGameId() {return soccerGameId;}
+
+    public void setSoccerGameId(Long soccerGameId) {this.soccerGameId = soccerGameId;}
 }

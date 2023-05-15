@@ -9,13 +9,13 @@ import java.util.Optional;
 
 public interface SoccerGameRepository {
 
-    Optional<SoccerGame> findById(long id);
+    Optional<SoccerGame> findSoccerGameById(long id);
 
-    SoccerGame save(@NotBlank String name, int minPlayers, int maxPlayers);
+    SoccerGame saveSoccerGame(@NotBlank String name, int minPlayers, int maxPlayers);
 
-    Player savePlayer(@NotBlank String name, int age);
+    Player savePlayerToGame(PlayerSaveCommand playerSaveCommand);
 
-    List<SoccerGame> findAll();
+    List<SoccerGame> findAllSoccerGames();
 
     List<Player> findAllPlayers();
 }

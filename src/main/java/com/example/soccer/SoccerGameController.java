@@ -24,27 +24,27 @@ class SoccerGameController {
     @Get("/{id}")
     SoccerGame show(Long id) {
         return soccerGameRepository
-                .findById(id)
+                .findSoccerGameById(id)
                 .orElse(null);
     }
 
     @Get(value = "/list")
     List<SoccerGame> list() {
-        return soccerGameRepository.findAll();
+        return soccerGameRepository.findAllSoccerGames();
     }
 
     @Post
     HttpResponse<SoccerGame> save(@Body @Valid SoccerGameSaveCommand cmd) {
-        SoccerGame soccerGame = soccerGameRepository.save(cmd.getName(), cmd.getMinPlayers(), cmd.getMaxPlayers());
+        SoccerGame soccerGame = soccerGameRepository.saveSoccerGame(cmd.getName(), cmd.getMinPlayers(), cmd.getMaxPlayers());
 
         return HttpResponse
                 .created(soccerGame)
                 .headers(headers -> headers.location(location(soccerGame.getId())));
     }
 
-    @Post(value = "/savePlayer")
-    HttpResponse<Player> savePlayer(@Body @Valid PlayerSaveCommand cmd) {
-        Player player = soccerGameRepository.savePlayer(cmd.getName(), cmd.getAge());
+    @Post(value = "/savePlayerToGame")
+    HttpResponse<Player> savePlayerToGame(@Body @Valid PlayerSaveCommand cmd) {
+        Player player = soccerGameRepository.savePlayerToGame(cmd);
 
         return HttpResponse
                 .created(player)
