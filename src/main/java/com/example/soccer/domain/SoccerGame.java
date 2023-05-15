@@ -19,7 +19,7 @@ public class SoccerGame {
     private Long id;
 
     @NotNull
-    @Column(name = "name", nullable = false, unique = true)
+    @Column(name = "name", nullable = false)
     private String name;
 
     @JsonIgnore

@@ -1,6 +1,5 @@
 package com.example.soccer;
 
-import com.example.soccer.domain.Player;
 import com.example.soccer.domain.SoccerGame;
 import io.micronaut.core.type.Argument;
 import io.micronaut.http.HttpRequest;
@@ -15,6 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static io.micronaut.http.HttpHeaders.LOCATION;
 import static io.micronaut.http.HttpStatus.CREATED;
@@ -82,7 +82,7 @@ class SoccerGameControllerTest {
     void testSavePlayerToGame() {
 
         // save game
-        HttpRequest<?> request = HttpRequest.POST("/soccer", new SoccerGameSaveCommand("Saturday Pickup", 6,8));
+        HttpRequest<?> request = HttpRequest.POST("/soccer", new SoccerGameSaveCommand("Monday Pickup", 6,8));
         HttpResponse<?> response = blockingClient.exchange(request);
         Long soccerGameId = entityId(response);
 
@@ -90,8 +90,8 @@ class SoccerGameControllerTest {
         HttpRequest<?> playerRequest = HttpRequest.POST("/soccer/savePlayerToGame", new PlayerSaveCommand(soccerGameId, "Shreyas Assar", 16));
         HttpResponse<?> playerResponse = blockingClient.exchange(playerRequest);
 
-        List<SoccerGame> soccerGames = soccerGameRepository.findAllSoccerGames();
-        assertEquals("Saturday Pickup", soccerGames.get(0).getName());
+        List<SoccerGame> soccerGames = soccerGameRepository.findAllSoccerGames().stream().filter( sg -> sg.getName().equals("Monday Pickup")).collect(Collectors.toList());
+        assertEquals("Monday Pickup", soccerGames.get(0).getName());
         assertEquals("Shreyas Assar", soccerGames.get(0).getPlayerPool().stream().findFirst().get().getName());;
         assertEquals(16, soccerGames.get(0).getPlayerPool().stream().findFirst().get().getAge());;
     }
