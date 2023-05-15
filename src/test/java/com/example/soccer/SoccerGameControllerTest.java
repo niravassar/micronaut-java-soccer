@@ -14,7 +14,6 @@ import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static io.micronaut.http.HttpHeaders.LOCATION;
@@ -90,7 +89,6 @@ class SoccerGameControllerTest {
         List<Player> players = soccerGameRepository.findAllPlayers();
         assertEquals("Shreyas Assar", players.get(0).getName());
         assertEquals(16, players.get(0).getAge());
-
     }
 
     private Long entityId(HttpResponse response) {
