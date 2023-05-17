@@ -1,5 +1,6 @@
 package com.example.soccer;
 
+import com.example.soccer.domain.OrganizedSoccerGame;
 import com.example.soccer.domain.SoccerGame;
 import io.micronaut.core.type.Argument;
 import io.micronaut.http.HttpRequest;
@@ -94,6 +95,13 @@ class SoccerGameControllerTest {
         assertEquals("Monday Pickup", soccerGames.get(0).getName());
         assertEquals("Shreyas Assar", soccerGames.get(0).getPlayerPool().stream().findFirst().get().getName());;
         assertEquals(16, soccerGames.get(0).getPlayerPool().stream().findFirst().get().getAge());;
+    }
+
+    @Test
+    void testOrganizeSoccerEvents() {
+        HttpRequest<?> request = HttpRequest.POST("/soccer/organizeSoccerGames", null);
+        List<OrganizedSoccerGame> organizedSoccerGames = blockingClient.retrieve(request, Argument.of(List.class, OrganizedSoccerGame.class));
+        System.out.println(organizedSoccerGames.get(0));
     }
 
     private Long entityId(HttpResponse response) {

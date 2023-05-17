@@ -1,5 +1,6 @@
 package com.example.soccer;
 
+import com.example.soccer.domain.OrganizedSoccerGame;
 import com.example.soccer.domain.Player;
 import com.example.soccer.domain.SoccerGame;
 import io.micronaut.http.HttpResponse;
@@ -16,9 +17,11 @@ import java.util.List;
 class SoccerGameController {
 
     private final SoccerGameRepository soccerGameRepository;
+    private final SoccerGameService soccerGameService;
 
-    SoccerGameController(SoccerGameRepository soccerGameRepository) { // <3>
+    SoccerGameController(SoccerGameRepository soccerGameRepository, SoccerGameService soccerGameService) {
         this.soccerGameRepository = soccerGameRepository;
+        this.soccerGameService = soccerGameService;
     }
 
     @Get("/{id}")
@@ -49,6 +52,12 @@ class SoccerGameController {
         return HttpResponse
                 .created(player)
                 .headers(headers -> headers.location(location(player.getId())));
+    }
+
+    @Post(value = "/organizeSoccerGames")
+    List<OrganizedSoccerGame> organizeSoccerGames() {
+        System.out.println("I am here");
+        return List.of(new OrganizedSoccerGame(null));
     }
 
     private URI location(Long id) {
