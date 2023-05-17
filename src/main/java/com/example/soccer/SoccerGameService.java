@@ -12,6 +12,7 @@ public class SoccerGameService {
     }
 
     public List<OrganizedSoccerGame> organizeSoccerGames() {
+        System.out.println("in the service now");
         return null;
     }
 }
