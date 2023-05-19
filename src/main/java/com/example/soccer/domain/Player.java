@@ -13,7 +13,7 @@ import static javax.persistence.GenerationType.AUTO;
 
 @Serdeable
 @Entity
-public class Player {
+public class Player implements Comparable<Player> {
 
     @Id
     @GeneratedValue(strategy = AUTO)
@@ -57,5 +57,10 @@ public class Player {
 
     public void setAge(String isbn) {
         this.age = age;
+    }
+
+    @Override
+    public int compareTo(Player o) {
+        return 0;
     }
 }

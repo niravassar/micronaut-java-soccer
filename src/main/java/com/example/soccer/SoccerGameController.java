@@ -57,8 +57,8 @@ class SoccerGameController {
     @Post(value = "/organizeSoccerGames")
     List<OrganizedSoccerGame> organizeSoccerGames() {
         System.out.println("I am here");
-        soccerGameService.organizeSoccerGames();
-        return List.of(new OrganizedSoccerGame(null));
+        List<OrganizedSoccerGame> organizedSoccerGames = soccerGameService.organizeSoccerGames();
+        return organizedSoccerGames;
     }
 
     private URI location(Long id) {

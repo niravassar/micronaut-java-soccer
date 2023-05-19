@@ -11,8 +11,7 @@ import io.micronaut.http.client.annotation.Client;
 import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,6 +22,7 @@ import static io.micronaut.http.HttpStatus.NOT_FOUND;
 import static org.junit.jupiter.api.Assertions.*;
 
 @MicronautTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class SoccerGameControllerTest {
 
     private BlockingHttpClient blockingClient;
@@ -50,6 +50,7 @@ class SoccerGameControllerTest {
     }
 
     @Test
+    @Order(0)
     void testGenreCrudOperations() {
 
         HttpRequest<?> request = HttpRequest.POST("/soccer", new SoccerGameSaveCommand("Saturday Pickup", 6,8));
@@ -88,20 +89,31 @@ class SoccerGameControllerTest {
         Long soccerGameId = entityId(response);
 
         // save player to game
-        HttpRequest<?> playerRequest = HttpRequest.POST("/soccer/savePlayerToGame", new PlayerSaveCommand(soccerGameId, "Shreyas Assar", 16));
+        HttpRequest<?> playerRequest = HttpRequest.POST("/soccer/savePlayerToGame", new PlayerSaveCommand(soccerGameId, "Nirav Assar", 45));
         HttpResponse<?> playerResponse = blockingClient.exchange(playerRequest);
 
         List<SoccerGame> soccerGames = soccerGameRepository.findAllSoccerGames().stream().filter( sg -> sg.getName().equals("Monday Pickup")).collect(Collectors.toList());
         assertEquals("Monday Pickup", soccerGames.get(0).getName());
-        assertEquals("Shreyas Assar", soccerGames.get(0).getPlayerPool().stream().findFirst().get().getName());;
-        assertEquals(16, soccerGames.get(0).getPlayerPool().stream().findFirst().get().getAge());;
+        assertEquals("Nirav Assar", soccerGames.get(0).getPlayerPool().stream().findFirst().get().getName());;
+        assertEquals(45, soccerGames.get(0).getPlayerPool().stream().findFirst().get().getAge());;
     }
 
     @Test
     void testOrganizeSoccerEvents() {
-        HttpRequest<?> request = HttpRequest.POST("/soccer/organizeSoccerGames", null);
-        List<OrganizedSoccerGame> organizedSoccerGames = blockingClient.retrieve(request, Argument.of(List.class, OrganizedSoccerGame.class));
-        System.out.println(organizedSoccerGames.get(0));
+        // save game
+        HttpRequest<?> soccerGameRequest = HttpRequest.POST("/soccer", new SoccerGameSaveCommand("Tues Pickup", 2,4));
+        HttpResponse<?> response = blockingClient.exchange(soccerGameRequest);
+        Long soccerGameId = entityId(response);
+
+        // save player to game
+        HttpRequest<?> playerRequest = HttpRequest.POST("/soccer/savePlayerToGame", new PlayerSaveCommand(soccerGameId, "Nirav Assar",45 ));
+        HttpResponse<?> playerResponse = blockingClient.exchange(playerRequest);
+
+        playerRequest = HttpRequest.POST("/soccer/savePlayerToGame", new PlayerSaveCommand(soccerGameId, "Shreyas Assar", 16));
+        playerResponse = blockingClient.exchange(playerRequest);
+
+        HttpRequest<?> organizedRequest = HttpRequest.POST("/soccer/organizeSoccerGames", null);
+        List<OrganizedSoccerGame> organizedSoccerGames = blockingClient.retrieve(organizedRequest, Argument.of(List.class, OrganizedSoccerGame.class));
     }
 
     private Long entityId(HttpResponse response) {
