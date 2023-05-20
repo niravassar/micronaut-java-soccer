@@ -92,14 +92,14 @@ class SoccerGameControllerTest {
         HttpRequest<?> playerRequest = HttpRequest.POST("/soccer/savePlayerToGame", new PlayerSaveCommand(soccerGameId, "Nirav Assar", 45));
         HttpResponse<?> playerResponse = blockingClient.exchange(playerRequest);
 
-        List<SoccerGame> soccerGames = soccerGameRepository.findAllSoccerGames().stream().filter( sg -> sg.getName().equals("Monday Pickup")).collect(Collectors.toList());
-        assertEquals("Monday Pickup", soccerGames.get(0).getName());
-        assertEquals("Nirav Assar", soccerGames.get(0).getPlayerPool().stream().findFirst().get().getName());;
-        assertEquals(45, soccerGames.get(0).getPlayerPool().stream().findFirst().get().getAge());;
+        SoccerGame soccerGame = soccerGameRepository.findAllSoccerGames().stream().filter( sg -> sg.getName().equals("Monday Pickup")).findAny().orElse(null);
+        assertEquals("Monday Pickup", soccerGame.getName());
+        assertEquals("Nirav Assar", soccerGame.getPlayerPool().stream().findFirst().get().getName());;
+        assertEquals(45, soccerGame.getPlayerPool().stream().findFirst().get().getAge());;
     }
 
     @Test
-    void testOrganizeSoccerEvents() {
+    void testOrganizeSoccerEvents_simpleGame() {
         // save game
         HttpRequest<?> soccerGameRequest = HttpRequest.POST("/soccer", new SoccerGameSaveCommand("Tues Pickup", 2,4));
         HttpResponse<?> response = blockingClient.exchange(soccerGameRequest);
@@ -114,7 +114,13 @@ class SoccerGameControllerTest {
 
         HttpRequest<?> organizedRequest = HttpRequest.POST("/soccer/organizeSoccerGames", null);
         List<OrganizedSoccerGame> organizedSoccerGames = blockingClient.retrieve(organizedRequest, Argument.of(List.class, OrganizedSoccerGame.class));
+        OrganizedSoccerGame organizedSoccerGame = organizedSoccerGames.stream().filter( og -> "Tues Pickup".equals(og.getSoccerGame().getName())).findAny().orElse(null);
+        assertEquals(2, organizedSoccerGame.getSoccerGame().getMinPlayers());
+        assertEquals("Shreyas Assar", organizedSoccerGame.getTeamAPlayers().get(0).getName());
+        assertEquals("Nirav Assar", organizedSoccerGame.getTeamBPlayers().get(0).getName());
     }
+
+    /**********************************************************************************************************/
 
     private Long entityId(HttpResponse response) {
         String path = "/soccer/";

@@ -40,7 +40,13 @@ public class SoccerGameRepositoryImpl implements SoccerGameRepository {
     public Player savePlayerToGame(PlayerSaveCommand playerSaveCommand) {
         Optional<SoccerGame> soccerGame = this.findSoccerGameById(playerSaveCommand.getSoccerGameId());
         Player player = new Player(playerSaveCommand.getName(), playerSaveCommand.getAge());
-        soccerGame.ifPresent(sg -> sg.addPlayerToPlayerPool(player));
+        soccerGame.ifPresent(sg -> {
+            if(sg.getPlayerPool().size() < sg.getMaxPlayers()) {
+                sg.addPlayerToPlayerPool(player);
+            } else {
+                throw new RuntimeException("soccer game " + sg.getName() + " cannot acccept players. ");
+            }
+        });
         entityManager.persist(soccerGame.get());
         return player;
     }

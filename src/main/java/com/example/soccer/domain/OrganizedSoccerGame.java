@@ -40,6 +40,7 @@ public class OrganizedSoccerGame {
     public void addTeamBPlayer(Player player) {
         this.teamBPlayers.add(player);
     }
+
     public List<Player> getTeamAPlayers() {
         return teamAPlayers;
     }
@@ -47,4 +48,21 @@ public class OrganizedSoccerGame {
     public List<Player> getTeamBPlayers() {
         return teamBPlayers;
     }
+
+    public void setTeamAPlayers(List<Player> teamAPlayers) {
+        this.teamAPlayers = teamAPlayers;
+    }
+
+    public void setTeamBPlayers(List<Player> teamBPlayers) {
+        this.teamBPlayers = teamBPlayers;
+    }
+
+    public SoccerGame getSoccerGame() {
+        return soccerGame;
+    }
+
+    public Date getDateOrganized() {
+        return dateOrganized;
+    }
+
 }

@@ -34,7 +34,6 @@ public class SoccerGameService {
                 List<Player> sortedPlayersByAge = playerPool.stream().sorted(Comparator.comparing(Player::getAge)).collect(Collectors.toList());
                 Queue<Player> playersQueue = new PriorityQueue<Player>();
                 playersQueue.addAll(sortedPlayersByAge);
-                System.out.println(playersQueue);
 
                 boolean organizeTeamA = true;
 

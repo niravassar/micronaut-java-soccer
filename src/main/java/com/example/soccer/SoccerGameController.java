@@ -56,7 +56,6 @@ class SoccerGameController {
 
     @Post(value = "/organizeSoccerGames")
     List<OrganizedSoccerGame> organizeSoccerGames() {
-        System.out.println("I am here");
         List<OrganizedSoccerGame> organizedSoccerGames = soccerGameService.organizeSoccerGames();
         return organizedSoccerGames;
     }
