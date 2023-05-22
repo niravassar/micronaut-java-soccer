@@ -6,6 +6,7 @@ import io.micronaut.serde.annotation.Serdeable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * This is a model of a game that has been through processing and is organized.
@@ -42,11 +43,11 @@ public class OrganizedSoccerGame {
     }
 
     public List<Player> getTeamAPlayers() {
-        return teamAPlayers;
+        return teamAPlayers.stream().sorted().collect(Collectors.toList());
     }
 
     public List<Player> getTeamBPlayers() {
-        return teamBPlayers;
+        return teamBPlayers.stream().sorted().collect(Collectors.toList());
     }
 
     public void setTeamAPlayers(List<Player> teamAPlayers) {

@@ -1,6 +1,7 @@
 package com.example.soccer;
 
 import com.example.soccer.domain.OrganizedSoccerGame;
+import com.example.soccer.domain.Player;
 import com.example.soccer.domain.SoccerGame;
 import io.micronaut.core.type.Argument;
 import io.micronaut.http.HttpRequest;
@@ -13,6 +14,7 @@ import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.*;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -118,6 +120,39 @@ class SoccerGameControllerTest {
         assertEquals(2, organizedSoccerGame.getSoccerGame().getMinPlayers());
         assertEquals("Shreyas Assar", organizedSoccerGame.getTeamAPlayers().get(0).getName());
         assertEquals("Nirav Assar", organizedSoccerGame.getTeamBPlayers().get(0).getName());
+    }
+
+    @Test
+    void testOrganizeSoccerEvents_simpleGameWithSubs() {
+        // save game
+        HttpRequest<?> soccerGameRequest = HttpRequest.POST("/soccer", new SoccerGameSaveCommand("Wed Pickup", 2,4));
+        HttpResponse<?> response = blockingClient.exchange(soccerGameRequest);
+        Long soccerGameId = entityId(response);
+
+        // save player to game
+        HttpRequest<?> playerRequest = HttpRequest.POST("/soccer/savePlayerToGame", new PlayerSaveCommand(soccerGameId, "Nirav Assar",45 ));
+        HttpResponse<?> playerResponse = blockingClient.exchange(playerRequest);
+
+        playerRequest = HttpRequest.POST("/soccer/savePlayerToGame", new PlayerSaveCommand(soccerGameId, "Shreyas Assar", 16));
+        playerResponse = blockingClient.exchange(playerRequest);
+
+        playerRequest = HttpRequest.POST("/soccer/savePlayerToGame", new PlayerSaveCommand(soccerGameId, "Abhinay Assar", 12));
+        playerResponse = blockingClient.exchange(playerRequest);
+
+        playerRequest = HttpRequest.POST("/soccer/savePlayerToGame", new PlayerSaveCommand(soccerGameId, "Aditya Assar", 14));
+        playerResponse = blockingClient.exchange(playerRequest);
+
+        HttpRequest<?> organizedRequest = HttpRequest.POST("/soccer/organizeSoccerGames", null);
+        List<OrganizedSoccerGame> organizedSoccerGames = blockingClient.retrieve(organizedRequest, Argument.of(List.class, OrganizedSoccerGame.class));
+        OrganizedSoccerGame organizedSoccerGame = organizedSoccerGames.stream().filter( og -> "Wed Pickup".equals(og.getSoccerGame().getName())).findAny().orElse(null);
+        assertEquals(2, organizedSoccerGame.getSoccerGame().getMinPlayers());
+
+        List<Player> playersA = organizedSoccerGame.getTeamAPlayers().stream().sorted(Comparator.comparing(Player::getAge)).collect(Collectors.toList());
+        List<Player> playersB = organizedSoccerGame.getTeamBPlayers().stream().sorted(Comparator.comparing(Player::getAge)).collect(Collectors.toList());
+        assertEquals("Abhinay Assar", playersA.get(0).getName());
+        assertEquals("Shreyas Assar", playersA.get(1).getName());
+        assertEquals("Aditya Assar", playersB.get(0).getName());
+        assertEquals("Nirav Assar", playersB.get(1).getName());
     }
 
     /**********************************************************************************************************/

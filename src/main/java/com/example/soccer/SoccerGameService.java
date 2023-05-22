@@ -43,7 +43,12 @@ public class SoccerGameService {
                     } else {
                         organizedSoccerGame.addTeamBPlayer(playersQueue.remove());
                     }
-                    organizeTeamA = false;
+                    // toggle it
+                    organizeTeamA = !organizeTeamA;
+                    // sort again
+                    sortedPlayersByAge = playersQueue.stream().sorted(Comparator.comparing(Player::getAge)).collect(Collectors.toList());
+                    playersQueue.clear();
+                    playersQueue.addAll(sortedPlayersByAge);
                 }
             }
 
