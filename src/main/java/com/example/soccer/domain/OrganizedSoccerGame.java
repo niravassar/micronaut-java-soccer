@@ -26,6 +26,25 @@ public class OrganizedSoccerGame {
         this.soccerGame = soccerGame;
     }
 
+    public void createGameInstructions() {
+        StringBuilder sb = new StringBuilder();
+        String dateSentence = "This game is titled `" + this.soccerGame.getName() + "` and will take place on " + dateOrganized + ".";
+        String maxPlayersSentence = "The game needs a min of " + this.soccerGame.getMinPlayers() + " and a max of " + this.soccerGame.getMaxPlayers() +". They are split into two teams.";
+        String teamAPlayers = this.teamAPlayers.stream().map(player -> player.toString()).collect(Collectors.toList()).toString();
+        String teamBPlayers = this.teamBPlayers.stream().map(player -> player.toString()).collect(Collectors.toList()).toString();
+        String playersASentence = "Team A will have " + teamAPlayers + ".";
+        String playersBSentence = "Team B will have " + teamBPlayers + ".";
+
+        sb.append(dateSentence).append(" ").
+                append(maxPlayersSentence).append(" ").
+                append(playersASentence).append(" ").
+                append(playersBSentence);
+
+        this.gameInstructions = sb.toString();
+    }
+
+    /*******************************************************************************************/
+
     public String getGameInstructions() {
         return gameInstructions;
     }
@@ -66,4 +85,7 @@ public class OrganizedSoccerGame {
         return dateOrganized;
     }
 
+    public void setDateOrganized(Date dateOrganized) {
+        this.dateOrganized = dateOrganized;
+    }
 }

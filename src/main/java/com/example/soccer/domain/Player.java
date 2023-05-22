@@ -63,4 +63,9 @@ public class Player implements Comparable<Player> {
     public int compareTo(Player o) {
         return 0;
     }
+
+    @Override
+    public String toString() {
+        return this.name + " - Age: " + this.age;
+    }
 }

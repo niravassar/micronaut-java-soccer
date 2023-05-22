@@ -14,7 +14,12 @@ import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -101,7 +106,7 @@ class SoccerGameControllerTest {
     }
 
     @Test
-    void testOrganizeSoccerEvents_simpleGame() {
+    void testOrganizeSoccerEvents_game() {
         // save game
         HttpRequest<?> soccerGameRequest = HttpRequest.POST("/soccer", new SoccerGameSaveCommand("Tues Pickup", 2,4));
         HttpResponse<?> response = blockingClient.exchange(soccerGameRequest);
@@ -120,6 +125,8 @@ class SoccerGameControllerTest {
         assertEquals(2, organizedSoccerGame.getSoccerGame().getMinPlayers());
         assertEquals("Shreyas Assar", organizedSoccerGame.getTeamAPlayers().get(0).getName());
         assertEquals("Nirav Assar", organizedSoccerGame.getTeamBPlayers().get(0).getName());
+        assertTrue(organizedSoccerGame.getGameInstructions().contains("This game is titled"));
+        assertTrue(organizedSoccerGame.getGameInstructions().contains("Team A will have"));
     }
 
     @Test
@@ -153,9 +160,28 @@ class SoccerGameControllerTest {
         assertEquals("Shreyas Assar", playersA.get(1).getName());
         assertEquals("Aditya Assar", playersB.get(0).getName());
         assertEquals("Nirav Assar", playersB.get(1).getName());
+        assertTrue(organizedSoccerGame.getGameInstructions().contains("This game is titled"));
+        assertTrue(organizedSoccerGame.getGameInstructions().contains("Team A will have"));
     }
 
-    /**********************************************************************************************************/
+    @Test
+    void testCreateGameInstructions() throws ParseException {
+        SoccerGame soccerGame = new SoccerGame("Friends Soccer Game", 2, 4);
+
+        OrganizedSoccerGame organizedSoccerGame = new OrganizedSoccerGame(soccerGame);
+        LocalDate localDate = LocalDate.of(2023, 5, 22);
+        Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        organizedSoccerGame.setDateOrganized(date);
+
+        organizedSoccerGame.addTeamAPlayer(new Player("Kevin P", 30));
+        organizedSoccerGame.addTeamAPlayer(new Player("Danny P", 32));
+        organizedSoccerGame.addTeamBPlayer(new Player("Jorge P", 36));
+        organizedSoccerGame.addTeamBPlayer(new Player("Nirav A", 45));
+
+        organizedSoccerGame.createGameInstructions();
+        assertEquals("This game is titled `Friends Soccer Game` and will take place on " + date + ". The game needs a min of 2 and a max of 4. They are split into two teams. Team A will have [Kevin P - Age: 30, Danny P - Age: 32]. Team B will have [Jorge P - Age: 36, Nirav A - Age: 45].", organizedSoccerGame.getGameInstructions());
+    }
+        /**********************************************************************************************************/
 
     private Long entityId(HttpResponse response) {
         String path = "/soccer/";

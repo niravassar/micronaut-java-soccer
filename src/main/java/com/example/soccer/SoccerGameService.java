@@ -32,6 +32,7 @@ public class SoccerGameService {
             } else {
                 Queue<Player> playersQueue = sortPlayersIntoQueue(playerPool);
                 assignPlayersToTeams(organizedSoccerGame, playersQueue);
+                organizedSoccerGame.createGameInstructions();
             }
 
             organizedSoccerGames.add(organizedSoccerGame);
