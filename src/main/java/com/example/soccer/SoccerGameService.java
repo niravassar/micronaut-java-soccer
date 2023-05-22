@@ -28,24 +28,10 @@ public class SoccerGameService {
             Set<Player> playerPool = soccerGame.getPlayerPool();
 
             if (playerPool.size() < soccerGame.getMinPlayers()) {
-                organizedSoccerGame.setGameInstructions("This game cannot be played because it has only " + playerPool.size()
-                        + " players and we need minimum " + soccerGame.getMinPlayers() + " players.");
+                organizedSoccerGame.setGameInstructions("This game cannot be played because it has only " + playerPool.size() + " players and we need minimum " + soccerGame.getMinPlayers() + " players.");
             } else {
                 Queue<Player> playersQueue = sortPlayersIntoQueue(playerPool);
-
-                boolean organizeTeamA = true;
-
-                while (!playersQueue.isEmpty()) {
-                    if (organizeTeamA) {
-                        organizedSoccerGame.addTeamAPlayer(playersQueue.remove());
-                    } else {
-                        organizedSoccerGame.addTeamBPlayer(playersQueue.remove());
-                    }
-                    // toggle it
-                    organizeTeamA = !organizeTeamA;
-                    // sort again
-                    playersQueue = sortPlayersIntoQueue(playersQueue);
-                }
+                assignPlayersToTeams(organizedSoccerGame, playersQueue);
             }
 
             organizedSoccerGames.add(organizedSoccerGame);
@@ -59,5 +45,21 @@ public class SoccerGameService {
         Queue<Player> playersQueue = new PriorityQueue<Player>();
         playersQueue.addAll(sortedPlayersByAge);
         return playersQueue;
+    }
+
+    private void assignPlayersToTeams(OrganizedSoccerGame organizedSoccerGame, Queue<Player> playersQueue) {
+        boolean organizeTeamA = true;
+
+        while (!playersQueue.isEmpty()) {
+            if (organizeTeamA) {
+                organizedSoccerGame.addTeamAPlayer(playersQueue.remove());
+            } else {
+                organizedSoccerGame.addTeamBPlayer(playersQueue.remove());
+            }
+            // toggle it
+            organizeTeamA = !organizeTeamA;
+            // sort again
+            playersQueue = sortPlayersIntoQueue(playersQueue);
+        }
     }
 }
