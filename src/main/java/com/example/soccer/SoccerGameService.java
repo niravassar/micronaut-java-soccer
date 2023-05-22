@@ -25,15 +25,13 @@ public class SoccerGameService {
         for (SoccerGame soccerGame : soccerGames) {
 
             OrganizedSoccerGame organizedSoccerGame = new OrganizedSoccerGame(soccerGame);
-
             Set<Player> playerPool = soccerGame.getPlayerPool();
+
             if (playerPool.size() < soccerGame.getMinPlayers()) {
                 organizedSoccerGame.setGameInstructions("This game cannot be played because it has only " + playerPool.size()
                         + " players and we need minimum " + soccerGame.getMinPlayers() + " players.");
             } else {
-                List<Player> sortedPlayersByAge = playerPool.stream().sorted(Comparator.comparing(Player::getAge)).collect(Collectors.toList());
-                Queue<Player> playersQueue = new PriorityQueue<Player>();
-                playersQueue.addAll(sortedPlayersByAge);
+                Queue<Player> playersQueue = sortPlayersIntoQueue(playerPool);
 
                 boolean organizeTeamA = true;
 
@@ -46,9 +44,7 @@ public class SoccerGameService {
                     // toggle it
                     organizeTeamA = !organizeTeamA;
                     // sort again
-                    sortedPlayersByAge = playersQueue.stream().sorted(Comparator.comparing(Player::getAge)).collect(Collectors.toList());
-                    playersQueue.clear();
-                    playersQueue.addAll(sortedPlayersByAge);
+                    playersQueue = sortPlayersIntoQueue(playersQueue);
                 }
             }
 
@@ -56,5 +52,12 @@ public class SoccerGameService {
         }
 
         return organizedSoccerGames;
+    }
+
+    private Queue<Player> sortPlayersIntoQueue(Collection<Player> playerCollection) {
+        List<Player> sortedPlayersByAge = playerCollection.stream().sorted(Comparator.comparing(Player::getAge)).collect(Collectors.toList());
+        Queue<Player> playersQueue = new PriorityQueue<Player>();
+        playersQueue.addAll(sortedPlayersByAge);
+        return playersQueue;
     }
 }
