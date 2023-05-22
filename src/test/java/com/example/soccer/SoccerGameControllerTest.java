@@ -88,6 +88,26 @@ class SoccerGameControllerTest {
     }
 
     @Test
+    @Order(1)
+    void testSavePlayerToGame_minNotMet() {
+
+        // save game
+        HttpRequest<?> request = HttpRequest.POST("/soccer", new SoccerGameSaveCommand("Thursday Pickup", 4,10));
+        HttpResponse<?> response = blockingClient.exchange(request);
+        Long soccerGameId = entityId(response);
+
+        // save player to game
+        HttpRequest<?> playerRequest = HttpRequest.POST("/soccer/savePlayerToGame", new PlayerSaveCommand(soccerGameId, "Bob", 12));
+        HttpResponse<?> playerResponse = blockingClient.exchange(playerRequest);
+
+        // organize game
+        HttpRequest<?> organizedRequest = HttpRequest.POST("/soccer/organizeSoccerGames", null);
+        List<OrganizedSoccerGame> organizedSoccerGames = blockingClient.retrieve(organizedRequest, Argument.of(List.class, OrganizedSoccerGame.class));
+        OrganizedSoccerGame organizedSoccerGame = organizedSoccerGames.stream().filter( og -> "Thursday Pickup".equals(og.getSoccerGame().getName())).findAny().orElse(null);
+        assertEquals("This game cannot be played because it has only 1 players and we need minimum 4 players.", organizedSoccerGame.getGameInstructions());
+    }
+
+    @Test
     void testSavePlayerToGame() {
 
         // save game
@@ -112,13 +132,13 @@ class SoccerGameControllerTest {
         HttpResponse<?> response = blockingClient.exchange(soccerGameRequest);
         Long soccerGameId = entityId(response);
 
-        // save player to game
+        // save players to game
         HttpRequest<?> playerRequest = HttpRequest.POST("/soccer/savePlayerToGame", new PlayerSaveCommand(soccerGameId, "Nirav Assar",45 ));
         HttpResponse<?> playerResponse = blockingClient.exchange(playerRequest);
-
         playerRequest = HttpRequest.POST("/soccer/savePlayerToGame", new PlayerSaveCommand(soccerGameId, "Shreyas Assar", 16));
         playerResponse = blockingClient.exchange(playerRequest);
 
+        // organize games
         HttpRequest<?> organizedRequest = HttpRequest.POST("/soccer/organizeSoccerGames", null);
         List<OrganizedSoccerGame> organizedSoccerGames = blockingClient.retrieve(organizedRequest, Argument.of(List.class, OrganizedSoccerGame.class));
         OrganizedSoccerGame organizedSoccerGame = organizedSoccerGames.stream().filter( og -> "Tues Pickup".equals(og.getSoccerGame().getName())).findAny().orElse(null);
@@ -136,19 +156,17 @@ class SoccerGameControllerTest {
         HttpResponse<?> response = blockingClient.exchange(soccerGameRequest);
         Long soccerGameId = entityId(response);
 
-        // save player to game
+        // save players to game
         HttpRequest<?> playerRequest = HttpRequest.POST("/soccer/savePlayerToGame", new PlayerSaveCommand(soccerGameId, "Nirav Assar",45 ));
         HttpResponse<?> playerResponse = blockingClient.exchange(playerRequest);
-
         playerRequest = HttpRequest.POST("/soccer/savePlayerToGame", new PlayerSaveCommand(soccerGameId, "Shreyas Assar", 16));
         playerResponse = blockingClient.exchange(playerRequest);
-
         playerRequest = HttpRequest.POST("/soccer/savePlayerToGame", new PlayerSaveCommand(soccerGameId, "Abhinay Assar", 12));
         playerResponse = blockingClient.exchange(playerRequest);
-
         playerRequest = HttpRequest.POST("/soccer/savePlayerToGame", new PlayerSaveCommand(soccerGameId, "Aditya Assar", 14));
         playerResponse = blockingClient.exchange(playerRequest);
 
+        // organize games
         HttpRequest<?> organizedRequest = HttpRequest.POST("/soccer/organizeSoccerGames", null);
         List<OrganizedSoccerGame> organizedSoccerGames = blockingClient.retrieve(organizedRequest, Argument.of(List.class, OrganizedSoccerGame.class));
         OrganizedSoccerGame organizedSoccerGame = organizedSoccerGames.stream().filter( og -> "Wed Pickup".equals(og.getSoccerGame().getName())).findAny().orElse(null);
